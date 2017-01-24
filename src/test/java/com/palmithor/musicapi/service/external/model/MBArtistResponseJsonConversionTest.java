@@ -1,5 +1,7 @@
 package com.palmithor.musicapi.service.external.model;
 
+import com.palmithor.musicapi.JsonTestUtils;
+import com.palmithor.musicapi.TestConstants;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -14,13 +16,12 @@ import static org.hamcrest.Matchers.hasSize;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class MBArtistResponseJsonConversionTest extends JsonConversionTest<MBArtistResponse> {
+public class MBArtistResponseJsonConversionTest {
 
 
     @Test
     public void testConvertMBArtistResponse() throws FileNotFoundException {
-        final String filename = getClass().getPackage().getName().replace('.', '/') + "/" + "MusicBrainzArtistResponse.json";
-        MBArtistResponse artist = readJsonFromFile(filename, MBArtistResponse.class);
+        MBArtistResponse artist = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.MUSIC_BRAINZ_ARTIST_RESPONSE, MBArtistResponse.class);
         assertThat(artist.getName(), is("Nirvana"));
         assertThat(artist.getSortName(), is("Nirvana"));
         assertThat(artist.getDisambiguation(), is("90s US grunge band"));

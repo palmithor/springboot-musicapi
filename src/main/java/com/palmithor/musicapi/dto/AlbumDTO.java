@@ -42,7 +42,6 @@ public class AlbumDTO {
         private Builder() {
         }
 
-
         public Builder withTitle(String title) {
             this.title = title;
             return this;

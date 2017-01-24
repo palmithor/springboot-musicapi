@@ -1,5 +1,7 @@
 package com.palmithor.musicapi.service.external.model;
 
+import com.palmithor.musicapi.JsonTestUtils;
+import com.palmithor.musicapi.TestConstants;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -14,13 +16,12 @@ import static org.hamcrest.Matchers.*;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class WikipediaResponseJsonConversionTest extends JsonConversionTest<WikipediaResponse> {
+public class WikipediaResponseJsonConversionTest {
 
 
     @Test
     public void testConvertWikipediaResponse() throws FileNotFoundException {
-        final String filename = getClass().getPackage().getName().replace('.', '/') + "/" + "WikipediaResponse.json";
-        WikipediaResponse wikipediaResponse = readJsonFromFile(filename, WikipediaResponse.class);
+        WikipediaResponse wikipediaResponse = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.WIKIPEDIA_RESPONSE, WikipediaResponse.class);
         assertThat(wikipediaResponse.getBatchComplete(), is(isEmptyString()));
         assertThat(wikipediaResponse.getQuery().getPages().size(), is(1));
         WikipediaPage wikipediaPage = wikipediaResponse.getQuery().getPages().values().iterator().next();

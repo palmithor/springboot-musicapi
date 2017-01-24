@@ -21,12 +21,20 @@ public class ArtistDTO {
         this.albums = albums;
     }
 
-    public static ArtistDTOBuilder createBuilder() {
-        return new ArtistDTOBuilder();
-    }
-
     public String getMbid() {
         return mbid;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<AlbumDTO> getAlbums() {
+        return albums;
+    }
+
+    public static ArtistDTOBuilder createBuilder() {
+        return new ArtistDTOBuilder();
     }
 
     public static final class ArtistDTOBuilder {

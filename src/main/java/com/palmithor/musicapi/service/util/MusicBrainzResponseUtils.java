@@ -30,7 +30,7 @@ public class MusicBrainzResponseUtils {
      * @param musicBrainzResponse the response retrieved from Music Brainz API
      * @return Optional which is present if and only if the wikipedia relation exists and that its url is valid
      */
-    Optional<String> findWikipediaTitle(final MBArtistResponse musicBrainzResponse) {
+    public Optional<String> findWikipediaTitle(final MBArtistResponse musicBrainzResponse) {
         Optional<String> result = Optional.empty();
 
         if (musicBrainzResponse != null && musicBrainzResponse.hasRelations()) {
@@ -57,7 +57,7 @@ public class MusicBrainzResponseUtils {
      * @param musicBrainzResponse the response retrieved from Music Brainz API
      * @return a list containing all albums in from the Music Brainz Response as AlbumDTO. An empty list if the response contains no albums.
      */
-    List<AlbumDTO> filterAlbums(final MBArtistResponse musicBrainzResponse) {
+    public List<AlbumDTO> filterAlbums(final MBArtistResponse musicBrainzResponse) {
         final List<AlbumDTO> resultList = new ArrayList<>();
         if (musicBrainzResponse != null && musicBrainzResponse.hasReleases()) {
             List<AlbumDTO> albumList = musicBrainzResponse.getReleases().stream()

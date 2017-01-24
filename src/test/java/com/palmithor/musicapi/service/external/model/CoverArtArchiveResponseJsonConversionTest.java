@@ -1,5 +1,7 @@
 package com.palmithor.musicapi.service.external.model;
 
+import com.palmithor.musicapi.JsonTestUtils;
+import com.palmithor.musicapi.TestConstants;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -17,13 +19,12 @@ import static org.junit.Assert.assertTrue;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class CoverArtArchiveResponseJsonConversionTest extends JsonConversionTest<CoverArtArchiveResponse> {
+public class CoverArtArchiveResponseJsonConversionTest {
 
 
     @Test
     public void testCoverArtArchiveResponse() throws FileNotFoundException {
-        final String filename = getClass().getPackage().getName().replace('.', '/') + "/" + "CoverArtArchiveResponse.json";
-        CoverArtArchiveResponse coverArtArchiveResponse = readJsonFromFile(filename, CoverArtArchiveResponse.class);
+        CoverArtArchiveResponse coverArtArchiveResponse = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.COVER_ART_ARCHIVE_RESPONSE, CoverArtArchiveResponse.class);
 
         assertThat(coverArtArchiveResponse.getReleaseUrl(), is("http://musicbrainz.org/release/a146429a-cedc-3ab0-9e41-1aaf5f6cdc2d"));
         assertThat(coverArtArchiveResponse.getImages(), hasSize(1));

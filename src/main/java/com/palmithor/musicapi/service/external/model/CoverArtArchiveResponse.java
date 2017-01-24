@@ -32,4 +32,11 @@ public class CoverArtArchiveResponse {
     public List<CoverArtArchiveImage> getImages() {
         return images;
     }
+
+    public String getImageUrl() {
+        if (images != null && !images.isEmpty()) {
+            return images.get(0).getUrl();
+        }
+        return null;
+    }
 }

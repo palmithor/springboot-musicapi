@@ -31,5 +31,14 @@ public class WikipediaResponse {
     public WikipediaQuery getQuery() {
         return query;
     }
+
+    public String getDescription() {
+        String result = null;
+        if (query != null && query.getPages() != null && !query.getPages().isEmpty()) {
+            WikipediaPage wikipediaPage = query.getPages().values().iterator().next();
+            result = wikipediaPage.getDescription();
+        }
+        return result;
+    }
 }
 
