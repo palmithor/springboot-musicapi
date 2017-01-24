@@ -2,6 +2,9 @@ package com.palmithor.musicapi.service;
 
 import com.google.gson.Gson;
 import com.palmithor.musicapi.AppProfiles;
+import com.palmithor.musicapi.service.external.CoverArtArchiveService;
+import com.palmithor.musicapi.service.external.MusicBrainzService;
+import com.palmithor.musicapi.service.external.WikipediaService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,7 @@ import java.util.Arrays;
 @Configuration
 public class ServiceConfiguration {
 
-    @Autowired
-    private Environment environment;
+    @Autowired private Environment environment;
 
 
     @Bean
