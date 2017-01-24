@@ -14,12 +14,12 @@ import static org.hamcrest.Matchers.hasSize;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class MBArtistJsonConversionTest extends JsonConversionTest<MBArtist> {
+public class MBArtistResponseJsonConversionTest extends JsonConversionTest<MBArtistResponse> {
 
 
     @Test
     public void testConvertMBArtistResponse() throws FileNotFoundException {
-        MBArtist artist = readJsonFromFile("service/MusicBrainzArtistResponse.json", MBArtist.class);
+        MBArtistResponse artist = readJsonFromFile("service/MusicBrainzArtistResponse.json", MBArtistResponse.class);
         assertThat(artist.getName(), is("Nirvana"));
         assertThat(artist.getSortName(), is("Nirvana"));
         assertThat(artist.getDisambiguation(), is("90s US grunge band"));

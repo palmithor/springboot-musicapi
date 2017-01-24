@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Model for Music Brainz artist
+ * Model for Music Brainz artist response
  *
  * @author palmithor
  * @since 23.1.2017.
  */
-public class MBArtist {
+public class MBArtistResponse {
 
     @SerializedName("id") private final String id;
     @SerializedName("name") private final String name;
@@ -28,7 +28,7 @@ public class MBArtist {
     @SerializedName("area") private final MBArea area;
     @SerializedName("isnis") private final List<String> isnis;
 
-    public MBArtist() {
+    public MBArtistResponse() {
         this.id = null;
         this.name = null;
         this.sortName = null;
@@ -46,18 +46,18 @@ public class MBArtist {
         this.isnis = null;
     }
 
-    public MBArtist(final String id,
-                    final String name,
-                    final String sortName,
-                    final String typeId,
-                    final String country,
-                    final String gender,
-                    final String genderId,
-                    final String disambiguation,
-                    final String type,
-                    final List<MBArtistRelation> relations,
-                    final List<MBReleaseGroup> releaseGroups,
-                    final MBLifeSpan lifeSpan, final MBArea beginArea, final MBArea area, final List<String> isnis) {
+    public MBArtistResponse(final String id,
+                            final String name,
+                            final String sortName,
+                            final String typeId,
+                            final String country,
+                            final String gender,
+                            final String genderId,
+                            final String disambiguation,
+                            final String type,
+                            final List<MBArtistRelation> relations,
+                            final List<MBReleaseGroup> releaseGroups,
+                            final MBLifeSpan lifeSpan, final MBArea beginArea, final MBArea area, final List<String> isnis) {
         this.id = id;
         this.name = name;
         this.sortName = sortName;

@@ -14,15 +14,15 @@ import static org.hamcrest.Matchers.*;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class WikipediaResponseJsonConversionTest extends JsonConversionTest<WikipediaParent> {
+public class WikipediaResponseJsonConversionTest extends JsonConversionTest<WikipediaResponse> {
 
 
     @Test
     public void testConvertWikipediaResponse() throws FileNotFoundException {
-        WikipediaParent wikipediaParent = readJsonFromFile("service/WikipediaResponse.json", WikipediaParent.class);
-        assertThat(wikipediaParent.getBatchComplete(), is(isEmptyString()));
-        assertThat(wikipediaParent.getQuery().getPages().size(), is(1));
-        WikipediaPage wikipediaPage = wikipediaParent.getQuery().getPages().values().iterator().next();
+        WikipediaResponse wikipediaResponse = readJsonFromFile("service/WikipediaResponse.json", WikipediaResponse.class);
+        assertThat(wikipediaResponse.getBatchComplete(), is(isEmptyString()));
+        assertThat(wikipediaResponse.getQuery().getPages().size(), is(1));
+        WikipediaPage wikipediaPage = wikipediaResponse.getQuery().getPages().values().iterator().next();
         assertThat(wikipediaPage.getDescription(), is(not(isEmptyOrNullString())));
         assertThat(wikipediaPage.getTitle(), is("Nirvana (band)"));
         assertThat(wikipediaPage.getNs(), is(0));

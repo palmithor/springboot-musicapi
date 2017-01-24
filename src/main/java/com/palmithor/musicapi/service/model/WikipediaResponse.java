@@ -3,23 +3,23 @@ package com.palmithor.musicapi.service.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Model for Wikipedia Page Container
+ * Model for Wikipedia response
  *
  * @author palmithor
  * @since 24.1.2017.
  */
-public class WikipediaParent {
+public class WikipediaResponse {
 
 
     @SerializedName("batchcomplete") private String batchComplete;
     @SerializedName("query") private WikipediaQuery query;
 
-    public WikipediaParent() {
+    public WikipediaResponse() {
         this.batchComplete = null;
         this.query = null;
     }
 
-    public WikipediaParent(final String batchComplete, final WikipediaQuery query) {
+    public WikipediaResponse(final String batchComplete, final WikipediaQuery query) {
         this.batchComplete = batchComplete;
         this.query = query;
     }
