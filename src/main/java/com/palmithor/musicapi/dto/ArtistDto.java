@@ -8,14 +8,14 @@ import java.util.List;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class ArtistDTO {
+public class ArtistDto {
 
     private final String mbid;
     private final String description;
-    private final List<AlbumDTO> albums;
+    private final List<AlbumDto> albums;
 
 
-    public ArtistDTO(final String mbid, final String description, final List<AlbumDTO> albums) {
+    public ArtistDto(final String mbid, final String description, final List<AlbumDto> albums) {
         this.mbid = mbid;
         this.description = description;
         this.albums = albums;
@@ -29,7 +29,7 @@ public class ArtistDTO {
         return description;
     }
 
-    public List<AlbumDTO> getAlbums() {
+    public List<AlbumDto> getAlbums() {
         return albums;
     }
 
@@ -40,7 +40,7 @@ public class ArtistDTO {
     public static final class ArtistDTOBuilder {
         private String mbid;
         private String description;
-        private List<AlbumDTO> albums;
+        private List<AlbumDto> albums;
 
         private ArtistDTOBuilder() {
         }
@@ -56,13 +56,13 @@ public class ArtistDTO {
             return this;
         }
 
-        public ArtistDTOBuilder withAlbums(List<AlbumDTO> albums) {
+        public ArtistDTOBuilder withAlbums(List<AlbumDto> albums) {
             this.albums = albums;
             return this;
         }
 
-        public ArtistDTO build() {
-            return new ArtistDTO(mbid, description, albums);
+        public ArtistDto build() {
+            return new ArtistDto(mbid, description, albums);
         }
     }
 }

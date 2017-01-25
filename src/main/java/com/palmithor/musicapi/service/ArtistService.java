@@ -1,13 +1,10 @@
 package com.palmithor.musicapi.service;
 
-import com.palmithor.musicapi.dto.AlbumDTO;
-import com.palmithor.musicapi.dto.ArtistDTO;
-import com.palmithor.musicapi.service.external.CoverArtArchiveService;
+import com.palmithor.musicapi.dto.AlbumDto;
+import com.palmithor.musicapi.dto.ArtistDto;
 import com.palmithor.musicapi.service.external.MusicBrainzService;
 import com.palmithor.musicapi.service.external.WikipediaService;
-import com.palmithor.musicapi.service.external.model.CoverArtArchiveResponse;
 import com.palmithor.musicapi.service.external.model.MBArtistResponse;
-import com.palmithor.musicapi.service.external.model.MBRelease;
 import com.palmithor.musicapi.service.external.model.WikipediaResponse;
 import com.palmithor.musicapi.service.util.MusicBrainzResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import rx.Observable;
 import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,20 +32,18 @@ import java.util.stream.Collectors;
 @Component
 public class ArtistService {
 
-    private static final int API_SERVICE_TIMEOUT = 10; // TODO move to configurations
+    private static final String MB_PRIMARY_TYPE_ALBUM = "Album";
 
 
     @Autowired private MusicBrainzService musicBrainzService;
     @Autowired private WikipediaService wikipediaService;
-    @Autowired private CoverArtArchiveService coverArtArchiveService;
-
+    @Autowired private AlbumService albumService;
     @Autowired private MusicBrainzResponseUtils musicBrainzResponseUtils;
 
 
-    @SuppressWarnings("unchecked")
-    public Observable<ArtistDTO> findByMusicBrainzId(final String mbid) {
+    public Observable<ArtistDto> findByMusicBrainzId(final String mbid) {
         return musicBrainzService.getByMBId(mbid)
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .flatMap((Response<MBArtistResponse> response) -> {
                     if (!response.isSuccessful()) {
                         throw createMusicBrainzError(response);
@@ -55,36 +51,34 @@ public class ArtistService {
                     MBArtistResponse musicBrainzResponseBody = response.body();
 
                     Observable<Response<WikipediaResponse>> wikipediaRequestObservable = createWikipediaRequestObservable(musicBrainzResponseBody);
-                    Observable<List<CoverArtArchiveResponseReleaseWrapper>> coverArtRequestsObservable = createCoverArtRequestObservable(musicBrainzResponseBody);
+                    Observable<List<AlbumDto>> albumsObservable = createCoverArtRequestObservable(musicBrainzResponseBody);
 
-                    return Observable.zip(wikipediaRequestObservable, coverArtRequestsObservable, (wikipediaResponse, coverArtResponseWrapperList) -> {
+                    return Observable.zip(wikipediaRequestObservable, albumsObservable, (wikipediaResponse, albumDTOList) -> {
 
-                        ArtistDTO.ArtistDTOBuilder resultBuilder = ArtistDTO
+                        ArtistDto.ArtistDTOBuilder resultBuilder = ArtistDto
                                 .createBuilder()
                                 .withMbid(musicBrainzResponseBody.getId());
                         if (wikipediaResponse.isSuccessful()) {
                             resultBuilder.withDescription(wikipediaResponse.body().getDescription());
                         }
-                        List<AlbumDTO> albums = coverArtResponseWrapperList.stream()
-                                .filter(i -> i.release != null && i.response != null && i.response.isSuccessful())
-                                .map(i -> AlbumDTO.createBuilder().withId(i.release.getId()).withTitle(i.release.getTitle()).withImageUrl(i.response.body().getImageUrl()).build())
-                                .collect(Collectors.toList());
-                        resultBuilder.withAlbums(albums);
+
+                        resultBuilder.withAlbums(albumDTOList);
                         return resultBuilder.build();
                     });
                 });
     }
 
-    private Observable<List<CoverArtArchiveResponseReleaseWrapper>> createCoverArtRequestObservable(final MBArtistResponse musicBrainzResponseBody) {
-        return Observable.from(musicBrainzResponseBody.getReleases())
-                .flatMap(this::createCoverArtArchiveIdResponseObservable)
-                .subscribeOn(Schedulers.newThread())
-                .reduce(new ArrayList<CoverArtArchiveResponseReleaseWrapper>(), (list, item) -> {
-                    // here list is a list with all the items that have added
-                    // item is an instance of CoverArtArchiveIdResponseWrapper which contains the id of the release as well as the response
-                    list.add(item);
-                    return list;
-                });
+    private Observable<List<AlbumDto>> createCoverArtRequestObservable(final MBArtistResponse musicBrainzResponseBody) {
+        List<Observable<AlbumDto>> coverFetchObservables = createCoverFetchObservables(musicBrainzResponseBody);
+        if (coverFetchObservables.isEmpty()) {
+            return Observable.just(new ArrayList<>());
+        } else {
+            return Observable.combineLatest(coverFetchObservables, albums ->
+                    Arrays.stream(albums)
+                            .filter(obj -> obj != null && obj instanceof AlbumDto)
+                            .map(obj -> (AlbumDto) obj)
+                            .collect(Collectors.toList()));
+        }
     }
 
 
@@ -97,9 +91,15 @@ public class ArtistService {
         }
     }
 
-    private Observable<CoverArtArchiveResponseReleaseWrapper> createCoverArtArchiveIdResponseObservable(final MBRelease release) {
-        return coverArtArchiveService.getByMBId(release.getId())
-                .flatMap(response -> Observable.just(new CoverArtArchiveResponseReleaseWrapper(release, response)));
+    private List<Observable<AlbumDto>> createCoverFetchObservables(final MBArtistResponse mbArtistResponse) {
+        if (mbArtistResponse.hasReleases()) {
+            return mbArtistResponse.getReleases().stream()
+                    .filter(release -> MB_PRIMARY_TYPE_ALBUM.equals(release.getPrimaryType()))
+                    .map(release -> albumService.fetchAlbumCoverByMBRelease(release))
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
     }
 
 
@@ -112,46 +112,4 @@ public class ArtistService {
 
         return new ServiceException(ServiceError.INTERNAL_SERVER_ERROR);
     }
-
-
-    /**
-     * Helper class to let the release follow the observable
-     */
-    private class CoverArtArchiveResponseReleaseWrapper {
-        private MBRelease release;
-        private Response<CoverArtArchiveResponse> response;
-
-        public CoverArtArchiveResponseReleaseWrapper(final MBRelease release, final Response<CoverArtArchiveResponse> response) {
-            this.release = release;
-            this.response = response;
-        }
-    }
 }
-
-/*
-musicBrainzService.getByMBId(mbid)
-                .flatMap((Response<MBArtistResponse> response) -> {
-                    if (!response.isSuccessful()) {
-                        throw createMusicBrainzError(response);
-                    }
-                    MBArtistResponse mbArtistResponse = response.body();
-                    List<AlbumDTO> albums = musicBrainzResponseUtils.filterAlbums(mbArtistResponse);
-                    Observable<Response<WikipediaResponse>> wikipediaObservable = getWikipediaObservable(mbArtistResponse);
-
-
-                    // Finally zip all the observables, wikipedia, cover art and the already retrieved Music Brainz
-                    ArtistDTO.ArtistDTOBuilder artistDtoBuilder = ArtistDTO.createBuilder()
-                            .withMbid(mbArtistResponse.getId())
-                            .withAlbums(albums);
-
-                    return Observable.zip(Observable.just(artistDtoBuilder), wikipediaObservable, (artistDTOBuilder, wikipediaResponse) -> {
-                        if (wikipediaResponse.isSuccessful()) {
-                            artistDTOBuilder.withDescription(wikipediaResponse.body().getDescription());
-                        }
-                        return Observable.just(artistDTOBuilder);
-                    });
-                }).map(artistDTOBuilderObservable -> {
-            return null;
-        })
-
- */

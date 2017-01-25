@@ -1,9 +1,10 @@
 package com.palmithor.musicapi.service;
 
 import com.palmithor.musicapi.App;
-import com.palmithor.musicapi.dto.ArtistDTO;
+import com.palmithor.musicapi.dto.ArtistDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -30,14 +31,15 @@ public class ArtistServiceIT {
     @Autowired private ArtistService artistService;
 
     @Test
+
     public void testFindByMusicBrainzIdSuccessful() throws FileNotFoundException {
         long start = System.currentTimeMillis();
-        ArtistDTO artist = artistService.findByMusicBrainzId("5b11f4ce-a62d-471e-81fc-a69a8278c7da")
+        ArtistDto artist = artistService.findByMusicBrainzId("5b11f4ce-a62d-471e-81fc-a69a8278c7da")
                 .toBlocking()
                 .first();
 
         long total = System.currentTimeMillis() - start;
-        System.out.println("TOTAL TIME: " + total);
+        LoggerFactory.getLogger(ArtistServiceIT.class).info("Total response time for all findByMusicBrainzId(): " + total);
 
         assertThat(artist.getAlbums(), hasSize(25));
     }

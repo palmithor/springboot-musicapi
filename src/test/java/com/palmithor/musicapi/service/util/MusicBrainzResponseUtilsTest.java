@@ -1,19 +1,14 @@
 package com.palmithor.musicapi.service.util;
 
-import com.palmithor.musicapi.dto.AlbumDTO;
 import com.palmithor.musicapi.service.external.model.MBArtistRelation;
 import com.palmithor.musicapi.service.external.model.MBArtistResponse;
 import com.palmithor.musicapi.service.external.model.MBRelationUrl;
-import com.palmithor.musicapi.service.external.model.MBRelease;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -75,31 +70,4 @@ public class MusicBrainzResponseUtilsTest {
         assertThat(utils.findWikipediaTitle(response).get(), is("Nirvana_(band)"));
     }
 
-    @Test
-    public void testFilterAlbumsWithNullObject() throws Exception {
-        assertThat(utils.filterAlbums(null), hasSize(0));
-    }
-
-    @Test
-    public void testFilterAlbumsWithEmptyObject() throws Exception {
-        assertThat(utils.filterAlbums(new MBArtistResponse()), hasSize(0));
-    }
-
-    @Test
-    public void testFilterAlbumsWithNoRelations() throws Exception {
-        assertThat(utils.filterAlbums(MBArtistResponse.createBuilder().withRelations(new ArrayList<>()).build()), hasSize(0));
-    }
-
-    @Test
-    public void testFilterAlbumsWithRelations() throws Exception {
-        List<AlbumDTO> albums = utils.filterAlbums(MBArtistResponse
-                .createBuilder()
-                .withReleases(
-                        Collections.singletonList(
-                                MBRelease.createBuilder().withId("id").withTitle("title").build()
-                        )).build());
-        assertThat(albums, hasSize(1));
-        assertThat(albums.get(0).getId(), is("id"));
-        assertThat(albums.get(0).getTitle(), is("title"));
-    }
 }
