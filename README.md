@@ -1,3 +1,7 @@
+| master          | develop           |
+| :-------------: |:-------------:|
+| [![Build Status](https://travis-ci.org/palmithor/springboot-musicapi.svg?branch=master)](https://travis-ci.org/palmithor/springboot-musicapi)        | [![Build Status](https://travis-ci.org/palmithor/springboot-musicapi.svg?branch=develop)](https://travis-ci.org/palmithor/springboot-musicapi) |
+
 # springboot-musicapi
 Small project for testing out Spring Boot. It is a webservice which exposes one RESTful resource for getting information about an artist from different sources.
 The sources used are Music Brainz API, Wikipedia and Cover Art Archive.
