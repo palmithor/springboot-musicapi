@@ -8,17 +8,23 @@ import java.util.List;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class ArtistDto {
+public class ArtistDto implements BaseDto {
 
     private final String mbid;
+    private final String name;
     private final String description;
     private final List<AlbumDto> albums;
 
 
-    public ArtistDto(final String mbid, final String description, final List<AlbumDto> albums) {
+    public ArtistDto(final String mbid, final String name, final String description, final List<AlbumDto> albums) {
+        this.name = name;
         this.mbid = mbid;
         this.description = description;
         this.albums = albums;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getMbid() {
@@ -33,36 +39,42 @@ public class ArtistDto {
         return albums;
     }
 
-    public static ArtistDTOBuilder createBuilder() {
-        return new ArtistDTOBuilder();
+    public static Builder createBuilder() {
+        return new Builder();
     }
 
-    public static final class ArtistDTOBuilder {
+    public static final class Builder {
         private String mbid;
+        private String name;
         private String description;
         private List<AlbumDto> albums;
 
-        private ArtistDTOBuilder() {
+        private Builder() {
         }
 
 
-        public ArtistDTOBuilder withMbid(String mbid) {
+        public Builder withName(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withMBId(String mbid) {
             this.mbid = mbid;
             return this;
         }
 
-        public ArtistDTOBuilder withDescription(String description) {
+        public Builder withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public ArtistDTOBuilder withAlbums(List<AlbumDto> albums) {
+        public Builder withAlbums(List<AlbumDto> albums) {
             this.albums = albums;
             return this;
         }
 
         public ArtistDto build() {
-            return new ArtistDto(mbid, description, albums);
+            return new ArtistDto(mbid, name, description, albums);
         }
     }
 }

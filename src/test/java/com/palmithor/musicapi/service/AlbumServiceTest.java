@@ -52,7 +52,7 @@ public class AlbumServiceTest {
 
         assertThat(album.getId(), is(release.getId()));
         assertThat(album.getTitle(), is(release.getTitle()));
-        assertThat(album.getCoverImageUrl(), is(coverArtArchiveResponse.getImageUrl()));
+        assertThat(album.getImage(), is(coverArtArchiveResponse.getImageUrl()));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class AlbumServiceTest {
 
         assertThat(album.getId(), is(release.getId()));
         assertThat(album.getTitle(), is(release.getTitle()));
-        assertThat(album.getCoverImageUrl(), is(nullValue()));
+        assertThat(album.getImage(), is(nullValue()));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class AlbumServiceTest {
 
         assertThat(album.getId(), is(release.getId()));
         assertThat(album.getTitle(), is(release.getTitle()));
-        assertThat(album.getCoverImageUrl(), is(nullValue()));
+        assertThat(album.getImage(), is(nullValue()));
     }
 
     private MBRelease getMBReleaseObj() {

@@ -30,19 +30,19 @@ public class ServiceConfiguration {
 
 
     @Bean
-    public MusicBrainzService provideMusicBrainzService(final OkHttpClient client, final Gson gson) {
+    public MusicBrainzService musicBrainzService(final OkHttpClient client, final Gson gson) {
         final String serviceBaseUrl = "http://musicbrainz.org/";
         return createRetrofitInstance(client, gson, serviceBaseUrl).create(MusicBrainzService.class);
     }
 
     @Bean
-    public CoverArtArchiveService provideCoverArtArchiveService(final OkHttpClient client, final Gson gson) {
+    public CoverArtArchiveService coverArtArchiveService(final OkHttpClient client, final Gson gson) {
         final String serviceBaseUrl = "http://coverartarchive.org/";
         return createRetrofitInstance(client, gson, serviceBaseUrl).create(CoverArtArchiveService.class);
     }
 
     @Bean
-    public WikipediaService provideWikipediaService(final OkHttpClient client, final Gson gson) {
+    public WikipediaService wikipediaService(final OkHttpClient client, final Gson gson) {
         Retrofit retrofit = createRetrofitInstance(client, gson, "https://en.wikipedia.org/w/api.php/");
         return retrofit.create(WikipediaService.class);
     }

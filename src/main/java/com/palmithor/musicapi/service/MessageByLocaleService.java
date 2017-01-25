@@ -36,4 +36,7 @@ public class MessageByLocaleService {
         }
     }
 
+    public class Message {
+        public static final String SUCCESSFUL_OK = "message.success_ok";
+    }
 }

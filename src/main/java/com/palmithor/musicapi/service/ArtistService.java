@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import retrofit2.Response;
 import rx.Observable;
-import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +42,6 @@ public class ArtistService {
 
     public Observable<ArtistDto> findByMusicBrainzId(final String mbid) {
         return musicBrainzService.getByMBId(mbid)
-                .subscribeOn(Schedulers.io())
                 .flatMap((Response<MBArtistResponse> response) -> {
                     if (!response.isSuccessful()) {
                         throw createMusicBrainzError(response);
@@ -55,9 +53,10 @@ public class ArtistService {
 
                     return Observable.zip(wikipediaRequestObservable, albumsObservable, (wikipediaResponse, albumDTOList) -> {
 
-                        ArtistDto.ArtistDTOBuilder resultBuilder = ArtistDto
+                        ArtistDto.Builder resultBuilder = ArtistDto
                                 .createBuilder()
-                                .withMbid(musicBrainzResponseBody.getId());
+                                .withName(musicBrainzResponseBody.getName())
+                                .withMBId(musicBrainzResponseBody.getId());
                         if (wikipediaResponse.isSuccessful()) {
                             resultBuilder.withDescription(wikipediaResponse.body().getDescription());
                         }

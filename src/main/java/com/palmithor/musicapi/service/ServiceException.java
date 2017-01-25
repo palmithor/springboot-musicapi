@@ -12,7 +12,7 @@ public class ServiceException extends RuntimeException {
 
     final ServiceError serviceError;
 
-    ServiceException(final ServiceError serviceError) {
+    public ServiceException(final ServiceError serviceError) {
         this.serviceError = serviceError;
     }
 

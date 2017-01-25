@@ -6,16 +6,16 @@ package com.palmithor.musicapi.dto;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class AlbumDto {
+public class AlbumDto implements BaseDto {
 
     private final String title;
     private final String id;
-    private final String coverImageUrl;
+    private final String image;
 
-    public AlbumDto(final String title, final String id, final String coverImageUrl) {
+    public AlbumDto(final String title, final String id, final String image) {
         this.title = title;
         this.id = id;
-        this.coverImageUrl = coverImageUrl;
+        this.image = image;
     }
 
     public String getTitle() {
@@ -26,8 +26,8 @@ public class AlbumDto {
         return id;
     }
 
-    public String getCoverImageUrl() {
-        return coverImageUrl;
+    public String getImage() {
+        return image;
     }
 
     public static Builder createBuilder() {
