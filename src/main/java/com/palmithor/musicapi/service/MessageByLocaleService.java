@@ -30,6 +30,7 @@ public class MessageByLocaleService {
     public static class Errors {
         public static final String MBID_NOT_FOUND = "error.mbid_not_found";
         public static final String INTERNAL_SERVER_ERROR = "error.internal_server_error";
+        public static final String MBID_INVALID = "error.mbid_invalid";
 
         private Errors() {
 

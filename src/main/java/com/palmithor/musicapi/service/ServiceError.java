@@ -9,6 +9,8 @@ package com.palmithor.musicapi.service;
 public enum ServiceError {
 
     MUSIC_BRAIN_ID_NOT_FOUND(40401, MessageByLocaleService.Errors.MBID_NOT_FOUND),
+
+    MUSIC_BRAIN_ID_INVALID(40001, MessageByLocaleService.Errors.MBID_INVALID),
     INTERNAL_SERVER_ERROR(50001, MessageByLocaleService.Errors.INTERNAL_SERVER_ERROR);
 
     private final int code;

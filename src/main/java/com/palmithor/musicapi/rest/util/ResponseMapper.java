@@ -35,7 +35,7 @@ abstract class ResponseMapper<T> {
         return deferred;
     }
 
-    //todo implement public DeferredResult<ResponseEntity<ListResponse<T>>> mapListResponse(final Observable<List<T>> list) {
+
     private ErrorResponse mapThrowableToError(final Throwable throwable) {
         if (throwable instanceof ServiceException) {
             ServiceError serviceError = ((ServiceException) throwable).getServiceError();

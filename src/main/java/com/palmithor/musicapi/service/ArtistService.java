@@ -44,7 +44,7 @@ public class ArtistService {
         return musicBrainzService.getByMBId(mbid)
                 .flatMap((Response<MBArtistResponse> response) -> {
                     if (!response.isSuccessful()) {
-                        throw createMusicBrainzError(response);
+                        throw mapMBErrorToServiceException(response);
                     }
                     MBArtistResponse musicBrainzResponseBody = response.body();
 
@@ -102,13 +102,14 @@ public class ArtistService {
     }
 
 
-    private ServiceException createMusicBrainzError(final Response<MBArtistResponse> artistResponse) {
-        if (artistResponse.code() == 404) {
-            return new ServiceException(ServiceError.MUSIC_BRAIN_ID_NOT_FOUND);
+    private ServiceException mapMBErrorToServiceException(final Response<MBArtistResponse> artistResponse) {
+        switch (artistResponse.code()) {
+            case 404:
+                return new ServiceException(ServiceError.MUSIC_BRAIN_ID_NOT_FOUND);
+            case 400:
+                return new ServiceException(ServiceError.MUSIC_BRAIN_ID_INVALID);
+            default:
+                return new ServiceException(ServiceError.INTERNAL_SERVER_ERROR);
         }
-
-        // todo map more response code
-
-        return new ServiceException(ServiceError.INTERNAL_SERVER_ERROR);
     }
 }
