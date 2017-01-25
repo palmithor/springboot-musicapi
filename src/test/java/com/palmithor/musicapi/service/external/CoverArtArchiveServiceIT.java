@@ -2,6 +2,7 @@ package com.palmithor.musicapi.service.external;
 
 import com.palmithor.musicapi.App;
 import com.palmithor.musicapi.service.external.model.CoverArtArchiveResponse;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class CoverArtArchiveServiceIT {
     @Autowired private CoverArtArchiveService service;
 
     @Test
+    @Ignore
     public void testCoverArtArchiveRequest() throws Exception {
         Observable<Response<CoverArtArchiveResponse>> observable = service.getByMBId("1b022e01-4da6-387b-8658-8678046e4cef");
 

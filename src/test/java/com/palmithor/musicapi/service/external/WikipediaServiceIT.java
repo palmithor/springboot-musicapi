@@ -2,6 +2,7 @@ package com.palmithor.musicapi.service.external;
 
 import com.palmithor.musicapi.App;
 import com.palmithor.musicapi.service.external.model.WikipediaResponse;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class WikipediaServiceIT {
     @Autowired private WikipediaService service;
 
     @Test
-
+    @Ignore
     public void testWikipediaRequest() throws Exception {
         Observable<Response<WikipediaResponse>> observable = service.get("Nirvana_(band)");
 
