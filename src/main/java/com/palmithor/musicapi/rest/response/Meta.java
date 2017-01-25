@@ -7,7 +7,6 @@ package com.palmithor.musicapi.rest.response;
  */
 public class Meta {
 
-    private static final String MSG_OK = "Successful - OK";
     private static final int CODE_SUCCESS = 20000;
 
     private final Integer code;
