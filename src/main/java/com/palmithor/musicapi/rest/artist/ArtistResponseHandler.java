@@ -1,6 +1,7 @@
-package com.palmithor.musicapi.rest.util;
+package com.palmithor.musicapi.rest.artist;
 
 import com.palmithor.musicapi.dto.ArtistDto;
+import com.palmithor.musicapi.rest.ResponseHandler;
 import org.springframework.stereotype.Component;
 
 /**

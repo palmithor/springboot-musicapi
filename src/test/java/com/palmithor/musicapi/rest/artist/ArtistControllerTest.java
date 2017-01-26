@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.rest;
+package com.palmithor.musicapi.rest.artist;
 
 import com.palmithor.musicapi.App;
 import com.palmithor.musicapi.dto.ArtistDto;
@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import rx.Observable;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ArtistControllerTest {
 
     @Autowired private WebApplicationContext wac;
+    @Autowired private CacheManager cacheManager;
     @MockBean private ArtistService artistService;
 
     private MockMvc mockMvc;
@@ -73,6 +76,10 @@ public class ArtistControllerTest {
         assertThat(responseBody.getMeta().getMessage(), is("Successful - OK"));
         assertThat(responseBody.getData().getMbid(), is(artistDto.getMbid()));
         assertThat(responseBody.getData().getDescription(), is(artistDto.getDescription()));
+
+        // Verify that it is stored in the cache
+        assertThat(cacheManager.getCache(ArtistController.CACHE_NAME).get(responseBody.getData().getMbid()),
+                is(notNullValue()));
     }
 
     @Test

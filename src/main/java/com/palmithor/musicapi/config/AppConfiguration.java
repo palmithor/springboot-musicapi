@@ -1,14 +1,11 @@
-package com.palmithor.musicapi;
+package com.palmithor.musicapi.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.palmithor.musicapi.util.DateUtils;
 import com.palmithor.musicapi.util.Rfc339DateJsonAdapter;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -74,18 +71,4 @@ public class AppConfiguration {
         messageSource.setCacheSeconds(DateUtils.HOUR_AS_SECONDS);
         return messageSource;
     }
-
-    @Bean
-    public CacheManager cacheManager() {
-        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
-    }
-
-    @Bean
-    public EhCacheManagerFactoryBean ehCacheCacheManager() {
-        EhCacheManagerFactoryBean factory = new EhCacheManagerFactoryBean();
-        factory.setConfigLocation(new ClassPathResource("ehcache.xml"));
-        factory.setShared(true);
-        return factory;
-    }
-
 }

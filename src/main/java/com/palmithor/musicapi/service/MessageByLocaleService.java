@@ -27,7 +27,7 @@ public class MessageByLocaleService {
     /**
      * The subclasses here should map to the prefix names (lower case) in the message resource file
      */
-    public static class Errors {
+    public static final class Errors {
         public static final String MBID_NOT_FOUND = "error.mbid_not_found";
         public static final String INTERNAL_SERVER_ERROR = "error.internal_server_error";
         public static final String MBID_INVALID = "error.mbid_invalid";
@@ -38,7 +38,11 @@ public class MessageByLocaleService {
         }
     }
 
-    public class Message {
+    public static final class Message {
         public static final String SUCCESSFUL_OK = "message.success_ok";
+
+        private Message() {
+
+        }
     }
 }

@@ -1,8 +1,7 @@
-package com.palmithor.musicapi.rest;
+package com.palmithor.musicapi.rest.artist;
 
 import com.palmithor.musicapi.dto.ArtistDto;
 import com.palmithor.musicapi.rest.response.ObjectResponse;
-import com.palmithor.musicapi.rest.util.ArtistResponseHandler;
 import com.palmithor.musicapi.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,14 +22,14 @@ import org.springframework.web.context.request.async.DeferredResult;
 public class ArtistController {
 
     // This maps to a cache attribute in ehcache.xml
-    private static final String cacheName = "artists";
+    public static final String CACHE_NAME = "artists";
 
     @Autowired private ArtistService artistService;
     @Autowired private ArtistResponseHandler responseMapper;
 
     @RequestMapping(method = RequestMethod.GET, value = "/artists/{artistId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public DeferredResult<ResponseEntity<ObjectResponse<ArtistDto>>> getByMBID(@PathVariable String artistId) {
-        return responseMapper.mapObjectResponse(cacheName, artistId, artistService.findByMusicBrainzId(artistId));
+        return responseMapper.mapObjectResponse(CACHE_NAME, artistId, artistService.findByMusicBrainzId(artistId));
     }
 
 }

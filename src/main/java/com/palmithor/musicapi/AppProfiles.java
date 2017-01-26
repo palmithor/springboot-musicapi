@@ -9,9 +9,8 @@ package com.palmithor.musicapi;
  */
 public class AppProfiles {
 
-    public static String DEV = "dev";
-    public static String TEST = "test";
     public static String PRODUCTION = "production";
+    public static String DEV = "dev";
 
     private AppProfiles() {
 

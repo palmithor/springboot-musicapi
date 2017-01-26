@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.rest.util;
+package com.palmithor.musicapi.rest;
 
 import com.palmithor.musicapi.rest.response.ErrorResponse;
 import com.palmithor.musicapi.rest.response.ObjectResponse;
@@ -18,7 +18,7 @@ import rx.Observable;
  * @author palmithor
  * @since 25.1.2017.
  */
-abstract class ResponseHandler<T> {
+public abstract class ResponseHandler<T> {
 
     @Autowired private MessageByLocaleService messageByLocaleService;
     @Autowired private CacheManager cacheManager;
