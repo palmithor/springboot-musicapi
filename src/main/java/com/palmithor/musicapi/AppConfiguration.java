@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.palmithor.musicapi.util.DateUtils;
 import com.palmithor.musicapi.util.Rfc339DateJsonAdapter;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -27,6 +31,7 @@ import java.util.Locale;
  * @since 24.1.2017.
  */
 @Configuration
+@EnableCaching
 public class AppConfiguration {
 
 
@@ -68,6 +73,19 @@ public class AppConfiguration {
         messageSource.setBasename("classpath:locale/messages");
         messageSource.setCacheSeconds(DateUtils.HOUR_AS_SECONDS);
         return messageSource;
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+    }
+
+    @Bean
+    public EhCacheManagerFactoryBean ehCacheCacheManager() {
+        EhCacheManagerFactoryBean factory = new EhCacheManagerFactoryBean();
+        factory.setConfigLocation(new ClassPathResource("ehcache.xml"));
+        factory.setShared(true);
+        return factory;
     }
 
 }

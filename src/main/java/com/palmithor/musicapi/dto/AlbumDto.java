@@ -1,12 +1,16 @@
 package com.palmithor.musicapi.dto;
 
+import java.io.Serializable;
+
 /**
  * Data transfer object with Album information
  *
  * @author palmithor
  * @since 24.1.2017.
  */
-public class AlbumDto implements BaseDto {
+public class AlbumDto implements BaseDto, Serializable {
+
+    private static final long serialVersionUID = 6324416234070752084L;
 
     private final String title;
     private final String id;

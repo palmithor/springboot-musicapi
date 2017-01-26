@@ -1,5 +1,6 @@
 package com.palmithor.musicapi.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,9 @@ import java.util.List;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class ArtistDto implements BaseDto {
+public class ArtistDto implements BaseDto, Serializable {
+
+    private static final long serialVersionUID = 8009221754239236264L;
 
     private final String mbid;
     private final String name;

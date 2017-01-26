@@ -8,6 +8,8 @@ import com.palmithor.musicapi.service.external.model.MBArtistResponse;
 import com.palmithor.musicapi.service.external.model.WikipediaResponse;
 import com.palmithor.musicapi.service.util.MusicBrainzResponseUtils;
 import com.palmithor.musicapi.util.RetryWithDelay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import retrofit2.Response;
@@ -31,6 +33,8 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ArtistService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ArtistService.class);
 
     private static final String MB_PRIMARY_TYPE_ALBUM = "Album";
 
@@ -60,6 +64,8 @@ public class ArtistService {
                                 .withMBId(musicBrainzResponseBody.getId());
                         if (wikipediaResponse.isSuccessful()) {
                             resultBuilder.withDescription(wikipediaResponse.body().getDescription());
+                        } else {
+                            logger.info("Unable to get Wikipedia info. Status code: ", wikipediaResponse.code());
                         }
 
                         resultBuilder.withAlbums(albumDTOList);
