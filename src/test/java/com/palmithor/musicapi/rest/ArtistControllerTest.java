@@ -82,7 +82,7 @@ public class ArtistControllerTest {
                 .withDescription("description")
                 .build();
         given(artistService.findByMusicBrainzId(artistDto.getMbid()))
-                .willReturn(Observable.error(new ServiceException(ServiceError.MUSIC_BRAIN_ID_NOT_FOUND)));
+                .willReturn(Observable.error(new ServiceException(ServiceError.MUSIC_BRAINZ_ID_NOT_FOUND)));
 
         final MvcResult mvcResult = this.mockMvc.perform(get("/artists/" + artistDto.getMbid())
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))

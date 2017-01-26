@@ -31,6 +31,7 @@ public class MessageByLocaleService {
         public static final String MBID_NOT_FOUND = "error.mbid_not_found";
         public static final String INTERNAL_SERVER_ERROR = "error.internal_server_error";
         public static final String MBID_INVALID = "error.mbid_invalid";
+        public static final String MUSIC_BRAINZ_INACCESSIBLE = "error.music_brainz_inaccessible";
 
         private Errors() {
 

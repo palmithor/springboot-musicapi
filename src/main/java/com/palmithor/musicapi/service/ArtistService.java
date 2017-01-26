@@ -7,6 +7,7 @@ import com.palmithor.musicapi.service.external.WikipediaService;
 import com.palmithor.musicapi.service.external.model.MBArtistResponse;
 import com.palmithor.musicapi.service.external.model.WikipediaResponse;
 import com.palmithor.musicapi.service.util.MusicBrainzResponseUtils;
+import com.palmithor.musicapi.util.RetryWithDelay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import retrofit2.Response;
@@ -64,7 +65,7 @@ public class ArtistService {
                         resultBuilder.withAlbums(albumDTOList);
                         return resultBuilder.build();
                     });
-                });
+                }).retryWhen(new RetryWithDelay(3, 5000)); // todo retry should be fore musicBrainzService;
     }
 
     private Observable<List<AlbumDto>> createCoverArtRequestObservable(final MBArtistResponse musicBrainzResponseBody) {
@@ -105,9 +106,11 @@ public class ArtistService {
     private ServiceException mapMBErrorToServiceException(final Response<MBArtistResponse> artistResponse) {
         switch (artistResponse.code()) {
             case 404:
-                return new ServiceException(ServiceError.MUSIC_BRAIN_ID_NOT_FOUND);
+                return new ServiceException(ServiceError.MUSIC_BRAINZ_ID_NOT_FOUND);
             case 400:
-                return new ServiceException(ServiceError.MUSIC_BRAIN_ID_INVALID);
+                return new ServiceException(ServiceError.MUSIC_BRAINZ_ID_INVALID);
+            case 500:
+                return new ServiceException(ServiceError.MUSIC_BRAINZ_INACCESSIBLE);
             default:
                 return new ServiceException(ServiceError.INTERNAL_SERVER_ERROR);
         }

@@ -7,7 +7,9 @@ import com.palmithor.musicapi.util.Rfc339DateJsonAdapter;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.servlet.LocaleResolver;
@@ -26,6 +28,14 @@ import java.util.Locale;
  */
 @Configuration
 public class AppConfiguration {
+
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
+        c.setLocation(new ClassPathResource("application.properties"));
+        return c;
+    }
 
     @Bean
     public HttpMessageConverters customConverters() {

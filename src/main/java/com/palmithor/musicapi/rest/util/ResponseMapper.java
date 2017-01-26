@@ -6,6 +6,7 @@ import com.palmithor.musicapi.service.MessageByLocaleService;
 import com.palmithor.musicapi.service.ServiceError;
 import com.palmithor.musicapi.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 import rx.Observable;
@@ -18,12 +19,13 @@ import rx.Observable;
  */
 abstract class ResponseMapper<T> {
 
-    private static final long RESPONSE_TIMEOUT = 90000L; // todo move to properties
-
     @Autowired MessageByLocaleService messageByLocaleService;
 
+    @Value("${com.palmithor.musicapi.timeout:60000}")
+    private Long timeout;
+
     public DeferredResult<ResponseEntity<ObjectResponse<T>>> mapObjectResponse(final Observable<T> observable) {
-        DeferredResult<ResponseEntity<ObjectResponse<T>>> deferred = new DeferredResult<>(RESPONSE_TIMEOUT);
+        DeferredResult<ResponseEntity<ObjectResponse<T>>> deferred = new DeferredResult<>(timeout);
         observable.subscribe(
                 obj -> deferred.setResult(ResponseEntity.ok(new ObjectResponse<>(obj, messageByLocaleService.getMessage(MessageByLocaleService.Message.SUCCESSFUL_OK)))),
                 throwable -> {

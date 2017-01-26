@@ -97,7 +97,7 @@ public class ArtistServiceTest {
         testSubscriber.assertError(ServiceException.class);
         List<Throwable> onErrorEvents = testSubscriber.getOnErrorEvents();
         assertThat(onErrorEvents, hasSize(1));
-        assertThat(((ServiceException) onErrorEvents.get(0)).getServiceError(), is(ServiceError.MUSIC_BRAIN_ID_NOT_FOUND));
+        assertThat(((ServiceException) onErrorEvents.get(0)).getServiceError(), is(ServiceError.MUSIC_BRAINZ_ID_NOT_FOUND));
     }
 
 
