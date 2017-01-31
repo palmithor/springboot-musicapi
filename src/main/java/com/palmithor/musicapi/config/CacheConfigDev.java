@@ -1,6 +1,9 @@
 package com.palmithor.musicapi.config;
 
 import com.palmithor.musicapi.rest.artist.ArtistController;
+import com.palmithor.musicapi.service.cache.CoverArtCacheService;
+import com.palmithor.musicapi.service.cache.MusicBrainzCacheService;
+import com.palmithor.musicapi.service.cache.WikipediaCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -26,7 +29,16 @@ public class CacheConfigDev {
     @Bean
     public CacheManager concurrentMapCacheManager() {
         log.debug("Cache manager is concurrentMapCacheManager");
-        return new ConcurrentMapCacheManager(ArtistController.CACHE_NAME);
+        return new ConcurrentMapCacheManager(
+
+                // Caching Services
+                MusicBrainzCacheService.CACHE_KEY,
+                WikipediaCacheService.CACHE_KEY,
+                CoverArtCacheService.CACHE_KEY,
+
+                // Controllers
+                ArtistController.CACHE_NAME
+        );
     }
 
 }

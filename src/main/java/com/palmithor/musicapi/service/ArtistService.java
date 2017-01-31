@@ -2,17 +2,17 @@ package com.palmithor.musicapi.service;
 
 import com.palmithor.musicapi.dto.AlbumDto;
 import com.palmithor.musicapi.dto.ArtistDto;
-import com.palmithor.musicapi.service.external.MusicBrainzService;
-import com.palmithor.musicapi.service.external.WikipediaService;
-import com.palmithor.musicapi.service.external.model.MBArtistResponse;
-import com.palmithor.musicapi.service.external.model.WikipediaResponse;
+import com.palmithor.musicapi.service.external.CoverArtAPIService;
+import com.palmithor.musicapi.service.external.MusicBrainzAPIService;
+import com.palmithor.musicapi.service.external.WikipediaAPIService;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistResponse;
+import com.palmithor.musicapi.service.model.WikipediaResponse;
 import com.palmithor.musicapi.service.util.MusicBrainzResponseUtils;
 import com.palmithor.musicapi.util.RetryWithDelay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import retrofit2.Response;
 import rx.Observable;
 
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 /**
  * Service for getting information about artists
  * <p>
- * Uses {@link com.palmithor.musicapi.service.external.WikipediaService}, {@link com.palmithor.musicapi.service.external.MusicBrainzService}
- * and {@link com.palmithor.musicapi.service.external.CoverArtArchiveService} to fetch information about the artist
+ * Uses {@link WikipediaAPIService}, {@link MusicBrainzAPIService}
+ * and {@link CoverArtAPIService} to fetch information about the artist
  * and its albums
  *
  * @author palmithor
@@ -46,40 +46,32 @@ public class ArtistService {
 
 
     public Observable<ArtistDto> findByMusicBrainzId(final String mbid) {
-        return musicBrainzService.getByMBId(mbid)
-                .flatMap((Response<MBArtistResponse> response) -> {
-                    if (!response.isSuccessful()) {
-                        throw mapMBErrorToServiceException(response);
-                    }
-                    MBArtistResponse musicBrainzResponseBody = response.body();
-
-                    Observable<Response<WikipediaResponse>> wikipediaRequestObservable = createWikipediaRequestObservable(musicBrainzResponseBody);
-                    Observable<List<AlbumDto>> albumsObservable = createCoverArtRequestObservable(musicBrainzResponseBody);
+        return musicBrainzService.getById(mbid)
+                .flatMap(response -> {
+                    Observable<WikipediaResponse> wikipediaRequestObservable = createWikipediaRequestObservable(response);
+                    Observable<List<AlbumDto>> albumsObservable = createCoverArtRequestObservable(response);
 
                     return Observable.zip(wikipediaRequestObservable, albumsObservable, (wikipediaResponse, albumDTOList) -> {
 
                         ArtistDto.Builder resultBuilder = ArtistDto
                                 .createBuilder()
-                                .withName(musicBrainzResponseBody.getName())
-                                .withMBId(musicBrainzResponseBody.getId());
-                        if (wikipediaResponse.isSuccessful()) {
-                            resultBuilder.withDescription(wikipediaResponse.body().getDescription());
-                        } else {
-                            logger.info("Unable to get Wikipedia info. Status code: ", wikipediaResponse.code());
-                        }
+                                .withName(response.getName())
+                                .withMBId(response.getId())
+                                .withDescription(wikipediaResponse.getDescription());
+
 
                         resultBuilder.withAlbums(albumDTOList);
                         return resultBuilder.build();
                     });
-                }).retryWhen(new RetryWithDelay(3, 5000)); // todo retry should be fore musicBrainzService;
+                }).retryWhen(new RetryWithDelay(3, 3000)); // todo retry should be fore musicBrainzService;
     }
 
-    private Observable<List<AlbumDto>> createCoverArtRequestObservable(final MBArtistResponse musicBrainzResponseBody) {
-        List<Observable<AlbumDto>> coverFetchObservables = createCoverFetchObservables(musicBrainzResponseBody);
-        if (coverFetchObservables.isEmpty()) {
+    private Observable<List<AlbumDto>> createCoverArtRequestObservable(final MusicBrainzArtistResponse musicBrainzResponseBody) {
+        List<Observable<AlbumDto>> coverArtObservables = createCoverFetchObservables(musicBrainzResponseBody);
+        if (coverArtObservables.isEmpty()) {
             return Observable.just(new ArrayList<>());
         } else {
-            return Observable.combineLatest(coverFetchObservables, albums ->
+            return Observable.combineLatest(coverArtObservables, albums ->
                     Arrays.stream(albums)
                             .filter(obj -> obj != null && obj instanceof AlbumDto)
                             .map(obj -> (AlbumDto) obj)
@@ -88,18 +80,22 @@ public class ArtistService {
     }
 
 
-    private Observable<Response<WikipediaResponse>> createWikipediaRequestObservable(final MBArtistResponse musicBrainzResponseBody) {
+    private Observable<WikipediaResponse> createWikipediaRequestObservable(final MusicBrainzArtistResponse musicBrainzResponseBody) {
         Optional<String> wikipediaTitleOptional = musicBrainzResponseUtils.findWikipediaTitle(musicBrainzResponseBody);
         if (wikipediaTitleOptional.isPresent()) {
-            return wikipediaService.get(wikipediaTitleOptional.get());
+            return Observable.create(subscriber -> wikipediaService.getById(wikipediaTitleOptional.get())
+                    .subscribe(subscriber::onNext, throwable -> {
+                        logger.debug("An error occurred accessing wikipedia service");
+                        subscriber.onNext(new WikipediaResponse());
+                    }, subscriber::onCompleted));
         } else {
-            return Observable.just(Response.success(new WikipediaResponse()));
+            return Observable.just(new WikipediaResponse());
         }
     }
 
-    private List<Observable<AlbumDto>> createCoverFetchObservables(final MBArtistResponse mbArtistResponse) {
-        if (mbArtistResponse.hasReleases()) {
-            return mbArtistResponse.getReleases().stream()
+    private List<Observable<AlbumDto>> createCoverFetchObservables(final MusicBrainzArtistResponse musicBrainzArtistResponse) {
+        if (musicBrainzArtistResponse.hasReleases()) {
+            return musicBrainzArtistResponse.getReleases().stream()
                     .filter(release -> MB_PRIMARY_TYPE_ALBUM.equals(release.getPrimaryType()))
                     .map(release -> albumService.fetchAlbumCoverByMBRelease(release))
                     .collect(Collectors.toList());
@@ -108,17 +104,4 @@ public class ArtistService {
         }
     }
 
-
-    private ServiceException mapMBErrorToServiceException(final Response<MBArtistResponse> artistResponse) {
-        switch (artistResponse.code()) {
-            case 404:
-                return new ServiceException(ServiceError.MUSIC_BRAINZ_ID_NOT_FOUND);
-            case 400:
-                return new ServiceException(ServiceError.MUSIC_BRAINZ_ID_INVALID);
-            case 500:
-                return new ServiceException(ServiceError.MUSIC_BRAINZ_INACCESSIBLE);
-            default:
-                return new ServiceException(ServiceError.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

@@ -1,7 +1,7 @@
 package com.palmithor.musicapi.service.util;
 
-import com.palmithor.musicapi.service.external.model.MBArtistRelation;
-import com.palmithor.musicapi.service.external.model.MBArtistResponse;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistRelation;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistResponse;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.stereotype.Component;
 
@@ -26,13 +26,13 @@ public class MusicBrainzResponseUtils {
      * @param musicBrainzResponse the response retrieved from Music Brainz API
      * @return Optional which is present if and only if the wikipedia relation exists and that its url is valid
      */
-    public Optional<String> findWikipediaTitle(final MBArtistResponse musicBrainzResponse) {
+    public Optional<String> findWikipediaTitle(final MusicBrainzArtistResponse musicBrainzResponse) {
         Optional<String> result = Optional.empty();
 
         if (musicBrainzResponse != null && musicBrainzResponse.hasRelations()) {
-            Optional<MBArtistRelation> wikipediaArtistRelationOptional = musicBrainzResponse.getRelations().stream().filter(artistRelation -> MB_WIKIPEDIA_RELATION_TYPE.equals(artistRelation.getType())).findFirst();
+            Optional<MusicBrainzArtistRelation> wikipediaArtistRelationOptional = musicBrainzResponse.getRelations().stream().filter(artistRelation -> MB_WIKIPEDIA_RELATION_TYPE.equals(artistRelation.getType())).findFirst();
             if (wikipediaArtistRelationOptional.isPresent()) {
-                MBArtistRelation artistRelation = wikipediaArtistRelationOptional.get();
+                MusicBrainzArtistRelation artistRelation = wikipediaArtistRelationOptional.get();
                 UrlValidator urlValidator = new UrlValidator();
                 if (artistRelation.hasUrl() && urlValidator.isValid(artistRelation.getUrl().getUrl())) {
                     String[] splits = artistRelation.getUrl().getUrl().split("/");

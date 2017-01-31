@@ -2,9 +2,9 @@ package com.palmithor.musicapi.service;
 
 import com.google.gson.Gson;
 import com.palmithor.musicapi.AppProfiles;
-import com.palmithor.musicapi.service.external.CoverArtArchiveService;
-import com.palmithor.musicapi.service.external.MusicBrainzService;
-import com.palmithor.musicapi.service.external.WikipediaService;
+import com.palmithor.musicapi.service.external.CoverArtAPIService;
+import com.palmithor.musicapi.service.external.MusicBrainzAPIService;
+import com.palmithor.musicapi.service.external.WikipediaAPIService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +30,27 @@ public class ServiceConfiguration {
 
 
     @Bean
-    public MusicBrainzService musicBrainzService(final OkHttpClient client, final Gson gson) {
+    public MusicBrainzAPIService musicBrainzAPIService(final OkHttpClient client, final Gson gson) {
         final String serviceBaseUrl = "http://musicbrainz.org/";
-        return createRetrofitInstance(client, gson, serviceBaseUrl).create(MusicBrainzService.class);
+        return createRetrofitInstance(client, gson, serviceBaseUrl).create(MusicBrainzAPIService.class);
     }
 
     @Bean
-    public CoverArtArchiveService coverArtArchiveService(final OkHttpClient client, final Gson gson) {
+    public CoverArtAPIService coverArtAPIService(final OkHttpClient client, final Gson gson) {
         final String serviceBaseUrl = "http://coverartarchive.org/";
-        return createRetrofitInstance(client, gson, serviceBaseUrl).create(CoverArtArchiveService.class);
+        return createRetrofitInstance(client, gson, serviceBaseUrl).create(CoverArtAPIService.class);
     }
 
     @Bean
-    public WikipediaService wikipediaService(final OkHttpClient client, final Gson gson) {
+    public WikipediaAPIService wikipediaAPIService(final OkHttpClient client, final Gson gson) {
         Retrofit retrofit = createRetrofitInstance(client, gson, "https://en.wikipedia.org/w/api.php/");
-        return retrofit.create(WikipediaService.class);
+        return retrofit.create(WikipediaAPIService.class);
     }
 
     @Bean
     public OkHttpClient okHttpClient() {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        if (!Arrays.stream(environment.getActiveProfiles()).anyMatch(
+        if (Arrays.stream(environment.getActiveProfiles()).noneMatch(
                 env -> (env.equalsIgnoreCase(AppProfiles.PRODUCTION)))) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

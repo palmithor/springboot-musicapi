@@ -1,6 +1,8 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 
 /**
  * Model for Music Brainz artist relation url
@@ -8,17 +10,19 @@ import com.google.gson.annotations.SerializedName;
  * @author palmithor
  * @since 23.1.2017.
  */
-public class MBRelationUrl {
+public class MusicBrainzRelationUrl implements Serializable {
 
+
+    private static final long serialVersionUID = 5111945597674018503L;
     @SerializedName("id") private final String id;
     @SerializedName("resource") private final String url;
 
-    public MBRelationUrl() {
+    public MusicBrainzRelationUrl() {
         this.id = null;
         this.url = null;
     }
 
-    MBRelationUrl(final String id, final String url) {
+    MusicBrainzRelationUrl(final String id, final String url) {
         this.id = id;
         this.url = url;
     }
@@ -52,8 +56,8 @@ public class MBRelationUrl {
             return this;
         }
 
-        public MBRelationUrl build() {
-            return new MBRelationUrl(id, url);
+        public MusicBrainzRelationUrl build() {
+            return new MusicBrainzRelationUrl(id, url);
         }
     }
 }

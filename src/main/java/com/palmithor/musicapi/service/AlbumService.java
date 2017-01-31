@@ -1,8 +1,9 @@
 package com.palmithor.musicapi.service;
 
 import com.palmithor.musicapi.dto.AlbumDto;
-import com.palmithor.musicapi.service.external.CoverArtArchiveService;
-import com.palmithor.musicapi.service.external.model.MBRelease;
+import com.palmithor.musicapi.service.model.MusicBrainzRelease;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rx.Observable;
@@ -18,20 +19,21 @@ import rx.schedulers.Schedulers;
 @Component
 public class AlbumService {
 
-    @Autowired CoverArtArchiveService coverArtArchiveService;
+    private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
 
-    Observable<AlbumDto> fetchAlbumCoverByMBRelease(final MBRelease release) {
+    @Autowired private CoverArtService coverArtService;
+
+    Observable<AlbumDto> fetchAlbumCoverByMBRelease(final MusicBrainzRelease release) {
         return Observable.create(subscriber -> {
             final AlbumDto.Builder albumBuilder = AlbumDto.createBuilder().withId(release.getId()).withTitle(release.getTitle());
-            coverArtArchiveService.getByMBId(release.getId())
+            coverArtService.getById(release.getId())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(coverArtArchiveResponse -> {
-                                if (coverArtArchiveResponse.isSuccessful()) {
-                                    albumBuilder.withImageUrl(coverArtArchiveResponse.body().getImageUrl());
-                                }
+                    .subscribe(response -> {
+                                albumBuilder.withImageUrl(response.getImageUrl());
                                 subscriber.onNext(albumBuilder.build());
 
                             }, throwable -> {
+                                logger.debug("An error occurred fetching album covers", throwable);
                                 subscriber.onNext(albumBuilder.build());
                                 subscriber.onCompleted();
                             }

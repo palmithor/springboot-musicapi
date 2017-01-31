@@ -1,7 +1,8 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,15 +11,17 @@ import java.util.List;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class MBArea {
+public class MusicBrainzArea implements Serializable {
 
+
+    private static final long serialVersionUID = 7947149303583782541L;
     @SerializedName("id") private final String id;
     @SerializedName("sort-name") private final String sortName;
     @SerializedName("name") private final String name;
     @SerializedName("disambiguation") private final String disambiguation;
     @SerializedName("iso-3166-1-codes") private final List<String> isoCodes;
 
-    public MBArea() {
+    public MusicBrainzArea() {
         this.id = null;
         this.sortName = null;
         this.name = null;
@@ -26,7 +29,7 @@ public class MBArea {
         this.isoCodes = null;
     }
 
-    public MBArea(final String id, final String sortName, final String name, final String disambiguation, final List<String> isoCodes) {
+    public MusicBrainzArea(final String id, final String sortName, final String name, final String disambiguation, final List<String> isoCodes) {
         this.id = id;
         this.sortName = sortName;
         this.name = name;

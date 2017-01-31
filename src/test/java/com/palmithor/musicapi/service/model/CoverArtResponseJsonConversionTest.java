@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.palmithor.musicapi.JsonTestUtils;
 import com.palmithor.musicapi.TestConstants;
@@ -19,16 +19,16 @@ import static org.junit.Assert.assertTrue;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class CoverArtArchiveResponseJsonConversionTest {
+public class CoverArtResponseJsonConversionTest {
 
 
     @Test
     public void testCoverArtArchiveResponse() throws FileNotFoundException {
-        CoverArtArchiveResponse coverArtArchiveResponse = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.COVER_ART_ARCHIVE_RESPONSE, CoverArtArchiveResponse.class);
+        CoverArtResponse coverArtResponse = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.COVER_ART_ARCHIVE_RESPONSE, CoverArtResponse.class);
 
-        assertThat(coverArtArchiveResponse.getReleaseUrl(), is("http://musicbrainz.org/release/a146429a-cedc-3ab0-9e41-1aaf5f6cdc2d"));
-        assertThat(coverArtArchiveResponse.getImages(), hasSize(1));
-        CoverArtArchiveImage coverArtArchiveImage = coverArtArchiveResponse.getImages().get(0);
+        assertThat(coverArtResponse.getReleaseUrl(), is("http://musicbrainz.org/release/a146429a-cedc-3ab0-9e41-1aaf5f6cdc2d"));
+        assertThat(coverArtResponse.getImages(), hasSize(1));
+        CoverArtArchiveImage coverArtArchiveImage = coverArtResponse.getImages().get(0);
         assertThat(coverArtArchiveImage.getId(), is("3012495605"));
         assertThat(coverArtArchiveImage.getEdit(), is(20473306L));
         assertThat(coverArtArchiveImage.getUrl(), is("http://coverartarchive.org/release/a146429a-cedc-3ab0-9e41-1aaf5f6cdc2d/3012495605.jpg"));

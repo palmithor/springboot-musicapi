@@ -6,7 +6,37 @@
 
     <diskStore path="java.io.tmpdir"/>
 
-    <cache name="artists"
+    <cache name="artist_response"
+           maxEntriesLocalHeap="1000"
+           maxEntriesLocalDisk="1000"
+           eternal="false"
+           timeToIdleSeconds="720"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+    <cache name="musicbrainz_artists"
+           maxEntriesLocalHeap="1000"
+           maxEntriesLocalDisk="1000"
+           eternal="false"
+           timeToIdleSeconds="720"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+    <cache name="wikipedia"
+           maxEntriesLocalHeap="1000"
+           maxEntriesLocalDisk="1000"
+           eternal="false"
+           timeToIdleSeconds="720"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+    <cache name="cover_art"
            maxEntriesLocalHeap="1000"
            maxEntriesLocalDisk="1000"
            eternal="false"

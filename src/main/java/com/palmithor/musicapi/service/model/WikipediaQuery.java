@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 

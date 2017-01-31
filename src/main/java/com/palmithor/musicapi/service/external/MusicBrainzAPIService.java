@@ -1,7 +1,7 @@
 package com.palmithor.musicapi.service.external;
 
 
-import com.palmithor.musicapi.service.external.model.MBArtistResponse;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistResponse;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -14,7 +14,7 @@ import rx.Observable;
  * @author palmithor
  * @since 23.1.2017.
  */
-public interface MusicBrainzService {
+public interface MusicBrainzAPIService {
 
 
     /**
@@ -25,9 +25,9 @@ public interface MusicBrainzService {
      * is for configuring some query params
      *
      * @param mbid the MusicBrainz identifier, format is UUID
-     * @return Observable Retrofit HTTP response which wraps a MBArtistResponse object
+     * @return Observable Retrofit HTTP response which wraps a MusicBrainzArtistResponse object
      */
     @GET("/ws/2/artist/{mbid}?fmt=json&inc=url-rels+release-groups")
-    Observable<Response<MBArtistResponse>> getByMBId(@Path("mbid") final String mbid);
+    Observable<Response<MusicBrainzArtistResponse>> getByMBId(@Path("mbid") final String mbid);
 
 }

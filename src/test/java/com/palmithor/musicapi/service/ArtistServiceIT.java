@@ -2,7 +2,6 @@ package com.palmithor.musicapi.service;
 
 import com.palmithor.musicapi.App;
 import com.palmithor.musicapi.dto.ArtistDto;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class ArtistServiceIT {
     @Autowired private ArtistService artistService;
 
     @Test
-    @Ignore
+
     public void testFindByMusicBrainzIdSuccessful() throws FileNotFoundException {
         long start = System.currentTimeMillis();
         ArtistDto artist = artistService.findByMusicBrainzId("5b11f4ce-a62d-471e-81fc-a69a8278c7da")

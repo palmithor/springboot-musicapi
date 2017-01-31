@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.palmithor.musicapi.JsonTestUtils;
 import com.palmithor.musicapi.TestConstants;
@@ -16,12 +16,12 @@ import static org.hamcrest.Matchers.hasSize;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class MBArtistResponseJsonConversionTest {
+public class MusicBrainzArtistResponseJsonConversionTest {
 
 
     @Test
     public void testConvertMBArtistResponse() throws FileNotFoundException {
-        MBArtistResponse artist = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.MUSIC_BRAINZ_ARTIST_RESPONSE, MBArtistResponse.class);
+        MusicBrainzArtistResponse artist = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.MUSIC_BRAINZ_ARTIST_RESPONSE, MusicBrainzArtistResponse.class);
         assertThat(artist.getName(), is("Nirvana"));
         assertThat(artist.getSortName(), is("Nirvana"));
         assertThat(artist.getDisambiguation(), is("90s US grunge band"));

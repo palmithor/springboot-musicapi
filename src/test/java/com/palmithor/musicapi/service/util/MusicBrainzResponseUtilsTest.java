@@ -1,8 +1,8 @@
 package com.palmithor.musicapi.service.util;
 
-import com.palmithor.musicapi.service.external.model.MBArtistRelation;
-import com.palmithor.musicapi.service.external.model.MBArtistResponse;
-import com.palmithor.musicapi.service.external.model.MBRelationUrl;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistRelation;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistResponse;
+import com.palmithor.musicapi.service.model.MusicBrainzRelationUrl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,15 +32,15 @@ public class MusicBrainzResponseUtilsTest {
 
     @Test
     public void testFindWikipediaTitleFailDuEmptyObject() throws Exception {
-        assertThat(utils.findWikipediaTitle(new MBArtistResponse()).isPresent(), is(false));
+        assertThat(utils.findWikipediaTitle(new MusicBrainzArtistResponse()).isPresent(), is(false));
     }
 
     @Test
     public void testFindWikipediaTitleFailDueNoWikipediaType() throws Exception {
-        MBArtistResponse response = MBArtistResponse
+        MusicBrainzArtistResponse response = MusicBrainzArtistResponse
                 .createBuilder()
                 .withRelations(Collections.singletonList(
-                        MBArtistRelation.createBuilder().withType("another_type").build()
+                        MusicBrainzArtistRelation.createBuilder().withType("another_type").build()
                 ))
                 .build();
         assertThat(utils.findWikipediaTitle(response).isPresent(), is(false));
@@ -48,10 +48,10 @@ public class MusicBrainzResponseUtilsTest {
 
     @Test
     public void testFindWikipediaTitleFailDueInvalidWikipediaRelation() throws Exception {
-        MBArtistResponse response = MBArtistResponse
+        MusicBrainzArtistResponse response = MusicBrainzArtistResponse
                 .createBuilder()
                 .withRelations(Collections.singletonList(
-                        MBArtistRelation.createBuilder().withType("wikipedia").withUrl(MBRelationUrl.createBuilder().withUrl("invalid url").build()).build()
+                        MusicBrainzArtistRelation.createBuilder().withType("wikipedia").withUrl(MusicBrainzRelationUrl.createBuilder().withUrl("invalid url").build()).build()
                 ))
                 .build();
         assertThat(utils.findWikipediaTitle(response).isPresent(), is(false));
@@ -60,10 +60,10 @@ public class MusicBrainzResponseUtilsTest {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test
     public void testFindWikipediaTitleOK() throws Exception {
-        MBArtistResponse response = MBArtistResponse
+        MusicBrainzArtistResponse response = MusicBrainzArtistResponse
                 .createBuilder()
                 .withRelations(Collections.singletonList(
-                        MBArtistRelation.createBuilder().withType("wikipedia").withUrl(MBRelationUrl.createBuilder().withUrl("https://en.wikipedia.org/wiki/Nirvana_(band)").build()).build()
+                        MusicBrainzArtistRelation.createBuilder().withType("wikipedia").withUrl(MusicBrainzRelationUrl.createBuilder().withUrl("https://en.wikipedia.org/wiki/Nirvana_(band)").build()).build()
                 ))
                 .build();
         assertThat(utils.findWikipediaTitle(response).isPresent(), is(true));

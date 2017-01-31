@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -45,6 +45,18 @@ public class CoverArtArchiveImage {
         this.comment = comment;
         this.approved = approved;
         this.thumbnails = thumbnails;
+    }
+
+    public CoverArtArchiveImage(final String url) {
+        this.id = null;
+        this.types = null;
+        this.front = null;
+        this.back = null;
+        this.edit = null;
+        this.url = url;
+        this.comment = null;
+        this.approved = null;
+        this.thumbnails = null;
     }
 
     public String getId() {

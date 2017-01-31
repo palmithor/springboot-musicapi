@@ -1,6 +1,6 @@
 package com.palmithor.musicapi.service.external;
 
-import com.palmithor.musicapi.service.external.model.WikipediaResponse;
+import com.palmithor.musicapi.service.model.WikipediaResponse;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -12,7 +12,7 @@ import rx.Observable;
  * @author palmithor
  * @since 23.1.2017.
  */
-public interface WikipediaService {
+public interface WikipediaAPIService {
 
 
     /**

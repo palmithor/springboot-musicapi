@@ -43,7 +43,9 @@ public abstract class ResponseHandler<T> {
         } else {
             observable.subscribe(
                     obj -> {
-                        cacheManager.getCache(cacheName).put(cacheKey, obj);
+                        if (shouldCache(obj)) {
+                            cacheManager.getCache(cacheName).put(cacheKey, obj);
+                        }
                         setResultsOK(deferred, obj);
                     },
                     throwable -> {
@@ -55,6 +57,8 @@ public abstract class ResponseHandler<T> {
         }
         return deferred;
     }
+
+    protected abstract boolean shouldCache(final T obj);
 
     private void setResultsOK(final DeferredResult<ResponseEntity<ObjectResponse<T>>> deferred, final T obj) {
         deferred.setResult(

@@ -1,7 +1,8 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,8 +11,10 @@ import java.util.List;
  * @author palmithor
  * @since 24.1.2017.
  */
-public class MBRelease {
+public class MusicBrainzRelease implements Serializable {
 
+
+    private static final long serialVersionUID = 6703978049529972053L;
     @SerializedName("id") private final String id;
     @SerializedName("primary-type-id") private final String primaryTypeId;
     @SerializedName("secondary-type-ids") private final List<String> secondaryTypeIds;
@@ -21,7 +24,7 @@ public class MBRelease {
     @SerializedName("title") private final String title;
     @SerializedName("secondary-types") private final List<String> secondaryTypes;
 
-    public MBRelease() {
+    public MusicBrainzRelease() {
         this.id = null;
         this.primaryTypeId = null;
         this.secondaryTypeIds = null;
@@ -32,7 +35,7 @@ public class MBRelease {
         this.secondaryTypes = null;
     }
 
-    public MBRelease(final String id, final String primaryTypeId, final List<String> secondaryTypeIds, final String disambiguation, final String firstReleaseDate, final String primaryType, final String title, final List<String> secondaryTypes) {
+    public MusicBrainzRelease(final String id, final String primaryTypeId, final List<String> secondaryTypeIds, final String disambiguation, final String firstReleaseDate, final String primaryType, final String title, final List<String> secondaryTypes) {
         this.id = id;
         this.primaryTypeId = primaryTypeId;
         this.secondaryTypeIds = secondaryTypeIds;
@@ -132,8 +135,8 @@ public class MBRelease {
             return this;
         }
 
-        public MBRelease build() {
-            return new MBRelease(id, primaryTypeId, secondaryTypeIds, disambiguation, firstReleaseDate, primaryType, title, secondaryTypes);
+        public MusicBrainzRelease build() {
+            return new MusicBrainzRelease(id, primaryTypeId, secondaryTypeIds, disambiguation, firstReleaseDate, primaryType, title, secondaryTypes);
         }
     }
 }

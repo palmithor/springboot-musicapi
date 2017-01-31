@@ -1,7 +1,7 @@
 package com.palmithor.musicapi.service.external;
 
 import com.palmithor.musicapi.App;
-import com.palmithor.musicapi.service.external.model.CoverArtArchiveResponse;
+import com.palmithor.musicapi.service.model.MusicBrainzArtistResponse;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Class only contains one test which should be ignored as it depends on the Cover Art Archive API which is not
+ * Class only contains one test which should be ignored as it depends on the Music Brainz API which is not
  * good to include in the default test suite.
  * <p>
  * Test was mainly created to make sure the retrofit configuration was correct and that the service could actually
@@ -27,17 +27,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = App.class)
-public class CoverArtArchiveServiceIT {
+public class MusicBrainzAPIServiceIT {
 
     // Class under test
-    @Autowired private CoverArtArchiveService service;
+    @Autowired private MusicBrainzAPIService service;
 
     @Test
     @Ignore
-    public void testCoverArtArchiveRequest() throws Exception {
-        Observable<Response<CoverArtArchiveResponse>> observable = service.getByMBId("1b022e01-4da6-387b-8658-8678046e4cef");
+    public void testMusicBrainzRequest() throws Exception {
+        Observable<Response<MusicBrainzArtistResponse>> observable = service.getByMBId("5b11f4ce-a62d-471e-81fc-a69a8278c7da");
 
-        Response<CoverArtArchiveResponse> first = observable
+        Response<MusicBrainzArtistResponse> first = observable
                 .toBlocking()
                 .first();
 

@@ -1,7 +1,7 @@
 package com.palmithor.musicapi.service.external;
 
 import com.palmithor.musicapi.App;
-import com.palmithor.musicapi.service.external.model.MBArtistResponse;
+import com.palmithor.musicapi.service.model.WikipediaResponse;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Class only contains one test which should be ignored as it depends on the Music Brainz API which is not
+ * Class only contains one test which should be ignored as it depends on the Wikipedia API which is not
  * good to include in the default test suite.
  * <p>
  * Test was mainly created to make sure the retrofit configuration was correct and that the service could actually
@@ -27,17 +27,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = App.class)
-public class MusicBrainzServiceIT {
+public class WikipediaAPIServiceIT {
 
     // Class under test
-    @Autowired private MusicBrainzService service;
+    @Autowired private WikipediaAPIService service;
 
     @Test
     @Ignore
-    public void testMusicBrainzRequest() throws Exception {
-        Observable<Response<MBArtistResponse>> observable = service.getByMBId("5b11f4ce-a62d-471e-81fc-a69a8278c7da");
+    public void testWikipediaRequest() throws Exception {
+        Observable<Response<WikipediaResponse>> observable = service.get("Nirvana_(band)");
 
-        Response<MBArtistResponse> first = observable
+        Response<WikipediaResponse> first = observable
                 .toBlocking()
                 .first();
 

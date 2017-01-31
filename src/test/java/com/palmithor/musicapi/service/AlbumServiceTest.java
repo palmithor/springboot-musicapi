@@ -4,9 +4,9 @@ import com.palmithor.musicapi.App;
 import com.palmithor.musicapi.JsonTestUtils;
 import com.palmithor.musicapi.TestConstants;
 import com.palmithor.musicapi.dto.AlbumDto;
-import com.palmithor.musicapi.service.external.CoverArtArchiveService;
-import com.palmithor.musicapi.service.external.model.CoverArtArchiveResponse;
-import com.palmithor.musicapi.service.external.model.MBRelease;
+import com.palmithor.musicapi.service.external.CoverArtAPIService;
+import com.palmithor.musicapi.service.model.CoverArtResponse;
+import com.palmithor.musicapi.service.model.MusicBrainzRelease;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import org.junit.Test;
@@ -35,31 +35,32 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(classes = App.class)
 public class AlbumServiceTest {
 
-    @MockBean private CoverArtArchiveService coverArtArchiveService;
+    @MockBean private CoverArtAPIService coverArtAPIService;
 
     @Autowired private AlbumService albumService;
 
     @Test
     public void testGetAlbumDTOByMBReleaseSuccess() throws Exception {
-        CoverArtArchiveResponse coverArtArchiveResponse = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.COVER_ART_ARCHIVE_RESPONSE, CoverArtArchiveResponse.class);
-        MBRelease release = getMBReleaseObj();
+        CoverArtResponse coverArtResponse = JsonTestUtils.readJsonFromFile(TestConstants.JsonFilePaths.COVER_ART_ARCHIVE_RESPONSE, CoverArtResponse.class);
+        MusicBrainzRelease release = getMusicBrainzReleaseObject();
 
-        given(coverArtArchiveService.getByMBId(release.getId()))
-                .willReturn(Observable.just(Response.success(coverArtArchiveResponse)));
+        given(coverArtAPIService.getByMusicBrainzReleaseId(release.getId()))
+                .willReturn(Observable.just(Response.success(coverArtResponse)));
+
         AlbumDto album = albumService.fetchAlbumCoverByMBRelease(release)
                 .toBlocking()
                 .first();
 
         assertThat(album.getId(), is(release.getId()));
         assertThat(album.getTitle(), is(release.getTitle()));
-        assertThat(album.getImage(), is(coverArtArchiveResponse.getImageUrl()));
+        assertThat(album.getImage(), is(coverArtResponse.getImageUrl()));
     }
 
     @Test
     public void testGetAlbumDTOByMBReleaseFailedCoverRequest() throws Exception {
-        MBRelease release = getMBReleaseObj();
+        MusicBrainzRelease release = getMusicBrainzReleaseObject();
 
-        given(coverArtArchiveService.getByMBId(release.getId()))
+        given(coverArtAPIService.getByMusicBrainzReleaseId(release.getId()))
                 .willReturn(Observable.just(Response.error(404,
                         ResponseBody.create(MediaType.parse("application/json"), ""))));
         AlbumDto album = albumService.fetchAlbumCoverByMBRelease(release)
@@ -73,9 +74,9 @@ public class AlbumServiceTest {
 
     @Test
     public void testGetAlbumDTOByMBReleaseErrorCoverRequest() throws Exception {
-        MBRelease release = getMBReleaseObj();
+        MusicBrainzRelease release = getMusicBrainzReleaseObject();
 
-        given(coverArtArchiveService.getByMBId(release.getId()))
+        given(coverArtAPIService.getByMusicBrainzReleaseId(release.getId()))
                 .willReturn(Observable.error(new Exception()));
         AlbumDto album = albumService.fetchAlbumCoverByMBRelease(release)
                 .toBlocking()
@@ -86,10 +87,10 @@ public class AlbumServiceTest {
         assertThat(album.getImage(), is(nullValue()));
     }
 
-    private MBRelease getMBReleaseObj() {
+    private MusicBrainzRelease getMusicBrainzReleaseObject() {
         String title = "title";
         String id = UUID.randomUUID().toString();
-        return MBRelease.createBuilder()
+        return MusicBrainzRelease.createBuilder()
                 .withId(id)
                 .withTitle(title)
                 .build();

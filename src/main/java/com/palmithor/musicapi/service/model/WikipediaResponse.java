@@ -1,4 +1,4 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -39,6 +39,33 @@ public class WikipediaResponse {
             result = wikipediaPage.getDescription();
         }
         return result;
+    }
+
+    public static Builder createBuilder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String batchComplete;
+        private WikipediaQuery query;
+
+        private Builder() {
+        }
+
+        public Builder withBatchComplete(String batchComplete) {
+            this.batchComplete = batchComplete;
+            return this;
+        }
+
+        public Builder withQuery(WikipediaQuery query) {
+            this.query = query;
+            return this;
+        }
+
+        public WikipediaResponse build() {
+            WikipediaResponse wikipediaResponse = new WikipediaResponse(batchComplete, query);
+            return wikipediaResponse;
+        }
     }
 }
 

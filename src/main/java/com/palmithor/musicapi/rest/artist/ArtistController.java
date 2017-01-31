@@ -22,7 +22,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 public class ArtistController {
 
     // This maps to a cache attribute in ehcache.xml
-    public static final String CACHE_NAME = "artists";
+    public static final String CACHE_NAME = "artist_response";
 
     @Autowired private ArtistService artistService;
     @Autowired private ArtistResponseHandler responseMapper;

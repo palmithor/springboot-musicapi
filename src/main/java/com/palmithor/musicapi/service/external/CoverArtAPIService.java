@@ -1,6 +1,6 @@
 package com.palmithor.musicapi.service.external;
 
-import com.palmithor.musicapi.service.external.model.CoverArtArchiveResponse;
+import com.palmithor.musicapi.service.model.CoverArtResponse;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -13,10 +13,10 @@ import rx.Observable;
  * @author palmithor
  * @since 23.1.2017.
  */
-public interface CoverArtArchiveService {
+public interface CoverArtAPIService {
 
 
     @GET("release-group/{mbid}")
-    Observable<Response<CoverArtArchiveResponse>> getByMBId(@Path("mbid") final String mbid);
+    Observable<Response<CoverArtResponse>> getByMusicBrainzReleaseId(@Path("mbid") final String mbid);
 
 }

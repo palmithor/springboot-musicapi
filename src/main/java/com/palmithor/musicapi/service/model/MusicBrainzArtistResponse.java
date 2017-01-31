@@ -1,7 +1,8 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,8 +11,10 @@ import java.util.List;
  * @author palmithor
  * @since 23.1.2017.
  */
-public class MBArtistResponse {
+public class MusicBrainzArtistResponse implements Serializable {
 
+
+    private static final long serialVersionUID = -382529053394075547L;
     @SerializedName("id") private final String id;
     @SerializedName("name") private final String name;
     @SerializedName("sort-name") private final String sortName;
@@ -21,14 +24,14 @@ public class MBArtistResponse {
     @SerializedName("gender-id") private final String genderId;
     @SerializedName("disambiguation") private final String disambiguation;
     @SerializedName("type") private final String type;
-    @SerializedName("relations") private final List<MBArtistRelation> relations;
-    @SerializedName("release-groups") private final List<MBRelease> releases;
-    @SerializedName("life-span") private final MBLifeSpan lifeSpan;
-    @SerializedName("begin_area") private final MBArea beginArea;
-    @SerializedName("area") private final MBArea area;
+    @SerializedName("relations") private final List<MusicBrainzArtistRelation> relations;
+    @SerializedName("release-groups") private final List<MusicBrainzRelease> releases;
+    @SerializedName("life-span") private final MusicBrainzLifeSpan lifeSpan;
+    @SerializedName("begin_area") private final MusicBrainzArea beginArea;
+    @SerializedName("area") private final MusicBrainzArea area;
     @SerializedName("isnis") private final List<String> isnis;
 
-    public MBArtistResponse() {
+    public MusicBrainzArtistResponse() {
         this.id = null;
         this.name = null;
         this.sortName = null;
@@ -46,18 +49,18 @@ public class MBArtistResponse {
         this.isnis = null;
     }
 
-    public MBArtistResponse(final String id,
-                            final String name,
-                            final String sortName,
-                            final String typeId,
-                            final String country,
-                            final String gender,
-                            final String genderId,
-                            final String disambiguation,
-                            final String type,
-                            final List<MBArtistRelation> relations,
-                            final List<MBRelease> releases,
-                            final MBLifeSpan lifeSpan, final MBArea beginArea, final MBArea area, final List<String> isnis) {
+    public MusicBrainzArtistResponse(final String id,
+                                     final String name,
+                                     final String sortName,
+                                     final String typeId,
+                                     final String country,
+                                     final String gender,
+                                     final String genderId,
+                                     final String disambiguation,
+                                     final String type,
+                                     final List<MusicBrainzArtistRelation> relations,
+                                     final List<MusicBrainzRelease> releases,
+                                     final MusicBrainzLifeSpan lifeSpan, final MusicBrainzArea beginArea, final MusicBrainzArea area, final List<String> isnis) {
         this.id = id;
         this.name = name;
         this.sortName = sortName;
@@ -111,23 +114,23 @@ public class MBArtistResponse {
         return type;
     }
 
-    public List<MBArtistRelation> getRelations() {
+    public List<MusicBrainzArtistRelation> getRelations() {
         return relations;
     }
 
-    public List<MBRelease> getReleases() {
+    public List<MusicBrainzRelease> getReleases() {
         return releases;
     }
 
-    public MBLifeSpan getLifeSpan() {
+    public MusicBrainzLifeSpan getLifeSpan() {
         return lifeSpan;
     }
 
-    public MBArea getBeginArea() {
+    public MusicBrainzArea getBeginArea() {
         return beginArea;
     }
 
-    public MBArea getArea() {
+    public MusicBrainzArea getArea() {
         return area;
     }
 
@@ -158,11 +161,11 @@ public class MBArtistResponse {
         private String genderId;
         private String disambiguation;
         private String type;
-        private List<MBArtistRelation> relations;
-        private List<MBRelease> releaseGroups;
-        private MBLifeSpan lifeSpan;
-        private MBArea beginArea;
-        private MBArea area;
+        private List<MusicBrainzArtistRelation> relations;
+        private List<MusicBrainzRelease> releaseGroups;
+        private MusicBrainzLifeSpan lifeSpan;
+        private MusicBrainzArea beginArea;
+        private MusicBrainzArea area;
         private List<String> isnis;
 
         private Builder() {
@@ -213,27 +216,27 @@ public class MBArtistResponse {
             return this;
         }
 
-        public Builder withRelations(List<MBArtistRelation> relations) {
+        public Builder withRelations(List<MusicBrainzArtistRelation> relations) {
             this.relations = relations;
             return this;
         }
 
-        public Builder withReleases(List<MBRelease> releaseGroups) {
+        public Builder withReleases(List<MusicBrainzRelease> releaseGroups) {
             this.releaseGroups = releaseGroups;
             return this;
         }
 
-        public Builder withLifeSpan(MBLifeSpan lifeSpan) {
+        public Builder withLifeSpan(MusicBrainzLifeSpan lifeSpan) {
             this.lifeSpan = lifeSpan;
             return this;
         }
 
-        public Builder withBeginArea(MBArea beginArea) {
+        public Builder withBeginArea(MusicBrainzArea beginArea) {
             this.beginArea = beginArea;
             return this;
         }
 
-        public Builder withArea(MBArea area) {
+        public Builder withArea(MusicBrainzArea area) {
             this.area = area;
             return this;
         }
@@ -243,8 +246,8 @@ public class MBArtistResponse {
             return this;
         }
 
-        public MBArtistResponse build() {
-            return new MBArtistResponse(id, name, sortName, typeId, country, gender, genderId, disambiguation, type, relations, releaseGroups, lifeSpan, beginArea, area, isnis);
+        public MusicBrainzArtistResponse build() {
+            return new MusicBrainzArtistResponse(id, name, sortName, typeId, country, gender, genderId, disambiguation, type, relations, releaseGroups, lifeSpan, beginArea, area, isnis);
         }
     }
 }

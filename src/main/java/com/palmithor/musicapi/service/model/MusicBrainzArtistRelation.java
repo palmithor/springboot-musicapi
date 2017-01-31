@@ -1,7 +1,9 @@
-package com.palmithor.musicapi.service.external.model;
+package com.palmithor.musicapi.service.model;
 
 import com.google.gson.annotations.SerializedName;
 import org.springframework.util.StringUtils;
+
+import java.io.Serializable;
 
 /**
  * Model for Music Brainz artist relation
@@ -9,20 +11,21 @@ import org.springframework.util.StringUtils;
  * @author palmithor
  * @since 23.1.2017.
  */
-public class MBArtistRelation {
+public class MusicBrainzArtistRelation implements Serializable {
 
 
+    private static final long serialVersionUID = 3541561973497994574L;
     @SerializedName("ended") private final Boolean ended;
     @SerializedName("type-id") private final String typeId;
     @SerializedName("type") private final String type;
     @SerializedName("direction") private final String direction;
-    @SerializedName("url") private final MBRelationUrl url;
+    @SerializedName("url") private final MusicBrainzRelationUrl url;
     @SerializedName("target-type") private final String targetType;
     @SerializedName("target-credit") private final String targetCredit;
     @SerializedName("source-credit") private final String sourceCredit;
 
 
-    public MBArtistRelation() {
+    public MusicBrainzArtistRelation() {
         this.ended = null;
         this.typeId = null;
         this.type = null;
@@ -33,7 +36,7 @@ public class MBArtistRelation {
         this.sourceCredit = null;
     }
 
-    public MBArtistRelation(final Boolean ended, final String typeId, final String type, final String direction, final MBRelationUrl url, final String targetType, final String targetCredit, final String sourceCredit) {
+    public MusicBrainzArtistRelation(final Boolean ended, final String typeId, final String type, final String direction, final MusicBrainzRelationUrl url, final String targetType, final String targetCredit, final String sourceCredit) {
         this.ended = ended;
         this.typeId = typeId;
         this.type = type;
@@ -60,7 +63,7 @@ public class MBArtistRelation {
         return direction;
     }
 
-    public MBRelationUrl getUrl() {
+    public MusicBrainzRelationUrl getUrl() {
         return url;
     }
 
@@ -89,7 +92,7 @@ public class MBArtistRelation {
         private String typeId;
         private String type;
         private String direction;
-        private MBRelationUrl url;
+        private MusicBrainzRelationUrl url;
         private String targetType;
         private String targetCredit;
         private String sourceCredit;
@@ -117,7 +120,7 @@ public class MBArtistRelation {
             return this;
         }
 
-        public Builder withUrl(MBRelationUrl url) {
+        public Builder withUrl(MusicBrainzRelationUrl url) {
             this.url = url;
             return this;
         }
@@ -137,8 +140,8 @@ public class MBArtistRelation {
             return this;
         }
 
-        public MBArtistRelation build() {
-            return new MBArtistRelation(ended, typeId, type, direction, url, targetType, targetCredit, sourceCredit);
+        public MusicBrainzArtistRelation build() {
+            return new MusicBrainzArtistRelation(ended, typeId, type, direction, url, targetType, targetCredit, sourceCredit);
         }
     }
 }
